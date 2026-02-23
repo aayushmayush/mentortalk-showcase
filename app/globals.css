@@ -2,46 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Base ─── */
-html {
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+@layer base {
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+  }
+
+  body {
+    font-family: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #050505;
+    color: #f0f0f2;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(99, 102, 241, 0.3);
+  }
 }
 
-body {
-  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  overflow-x: hidden;
-}
+/* ═══════════════════════════════════════════
+   iPhone Frame
+═══════════════════════════════════════════ */
 
-::selection {
-  background: rgba(99, 102, 241, 0.3);
-}
-
-/* ─── iPhone Frame ─── */
 .iphone {
-  width: 280px;
-  height: 572px;
-  background: #1c1c1e;
+  width: 270px;
+  height: 552px;
+  background: linear-gradient(145deg, #2a2a2e, #1a1a1e);
   border-radius: 48px;
   padding: 10px;
   position: relative;
   flex-shrink: 0;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 30px 100px rgba(0, 0, 0, 0.55), 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .iphone::before {
   content: "";
   position: absolute;
-  inset: -1px;
-  border-radius: 49px;
+  inset: 0;
+  border-radius: 48px;
+  padding: 1px;
   background: linear-gradient(
     160deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    transparent 40%
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.03) 40%,
+    transparent 60%
   );
-  z-index: -1;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   pointer-events: none;
 }
 
@@ -61,7 +73,7 @@ body {
   transform: translateX(-50%);
   width: 92px;
   height: 26px;
-  background: #1c1c1e;
+  background: #1a1a1e;
   border-radius: 14px;
   z-index: 10;
 }
@@ -78,189 +90,218 @@ body {
   z-index: 10;
 }
 
-/* Smaller variant for dual-phone view */
+/* Smaller for dual view */
 .iphone-sm {
-  width: 250px;
-  height: 510px;
+  width: 240px;
+  height: 490px;
   border-radius: 44px;
   padding: 9px;
 }
+.iphone-sm .iphone-screen { border-radius: 37px; }
+.iphone-sm .iphone-notch { width: 82px; height: 23px; top: 7px; }
+.iphone-sm .iphone-home { width: 90px; bottom: 5px; }
 
-.iphone-sm .iphone-screen {
-  border-radius: 36px;
-}
-
-.iphone-sm .iphone-notch {
-  width: 82px;
-  height: 23px;
-  top: 7px;
-}
-
-.iphone-sm .iphone-home {
-  width: 88px;
-  bottom: 5px;
-}
-
-/* ─── Glow behind phone ─── */
 .phone-glow {
-  position: relative;
+  filter: drop-shadow(0 0 80px rgba(139, 92, 246, 0.06))
+    drop-shadow(0 30px 60px rgba(0, 0, 0, 0.5));
 }
 
-.phone-glow::after {
-  content: "";
+.breathe {
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   Chapter System
+═══════════════════════════════════════════ */
+
+.chapter {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 340px;
-  height: 600px;
-  background: radial-gradient(
-    ellipse,
-    rgba(99, 102, 241, 0.06) 0%,
-    transparent 70%
-  );
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
   pointer-events: none;
-  z-index: -1;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ─── Chapter text transitions ─── */
-.chapter-text {
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.chapter-text.active {
+.chapter.active {
   opacity: 1;
-  transform: translateY(0);
+  pointer-events: auto;
 }
 
-.chapter-text.above {
-  opacity: 0;
-  transform: translateY(-20px);
+/* ═══════════════════════════════════════════
+   Animations
+═══════════════════════════════════════════ */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.chapter-text.below {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-/* ─── Progress dots ─── */
-.progress-dot {
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ─── Sync indicator ─── */
-.sync-pulse {
-  animation: syncPulse 2s ease-in-out infinite;
-}
-
-@keyframes syncPulse {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-/* ─── Scroll indicator ─── */
-@keyframes gentleBounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(6px);
-  }
-}
-
-.scroll-hint {
-  animation: gentleBounce 2.5s ease-in-out infinite;
-}
-
-/* ─── Fade in on mount ─── */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.8s ease forwards;
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-.animate-delay-1 {
-  animation-delay: 0.15s;
-  opacity: 0;
-}
-.animate-delay-2 {
-  animation-delay: 0.3s;
-  opacity: 0;
-}
-.animate-delay-3 {
-  animation-delay: 0.5s;
-  opacity: 0;
-}
-.animate-delay-4 {
-  animation-delay: 0.7s;
-  opacity: 0;
+@keyframes subtlePulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
 }
 
-/* ─── Feature cards ─── */
-.feature-card {
-  transition: background 0.25s ease, border-color 0.25s ease,
-    transform 0.25s ease;
+@keyframes breathe {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
 }
 
-.feature-card:hover {
-  background: #141418;
-  border-color: #2a2a32;
+.anim-fiu { animation: fadeInUp 0.7s ease forwards; }
+.anim-fi  { animation: fadeIn 0.5s ease forwards; }
+.anim-si  { animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.d1 { animation-delay: 0.1s; opacity: 0; }
+.d2 { animation-delay: 0.25s; opacity: 0; }
+.d3 { animation-delay: 0.4s; opacity: 0; }
+.d4 { animation-delay: 0.6s; opacity: 0; }
+.d5 { animation-delay: 0.8s; opacity: 0; }
+
+/* ═══════════════════════════════════════════
+   Skip Button
+═══════════════════════════════════════════ */
+
+.skip-btn {
+  position: absolute;
+  bottom: 36px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 8px;
+  color: rgba(167, 139, 250, 0.85);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "DM Sans", sans-serif;
+  z-index: 20;
+}
+
+.skip-btn:hover {
+  background: rgba(139, 92, 246, 0.18);
+  color: rgba(196, 181, 253, 1);
+  border-color: rgba(139, 92, 246, 0.4);
+  transform: translateX(2px);
+}
+
+/* ═══════════════════════════════════════════
+   Progress
+═══════════════════════════════════════════ */
+
+.ch-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.03);
+  z-index: 20;
+}
+
+.ch-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.4), rgba(99, 102, 241, 0.5));
+  transition: width 0.2s linear;
+}
+
+.ch-label {
+  position: absolute;
+  top: 36px;
+  left: 40px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.4);
+  z-index: 20;
+}
+
+.ch-dots {
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 20;
+}
+
+.ch-dot {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.ch-dot-done { background: rgba(139, 92, 246, 0.45); }
+
+.ch-dot-fill {
+  height: 100%;
+  background: rgba(167, 139, 250, 0.8);
+  border-radius: 2px;
+}
+
+.sync-dot { animation: subtlePulse 2s ease-in-out infinite; color: rgba(167, 139, 250, 0.7) !important; }
+
+/* ═══════════════════════════════════════════
+   Feature cards
+═══════════════════════════════════════════ */
+
+.feat-card { transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+.feat-card:hover {
+  background: #0e0e12 !important;
+  border-color: rgba(139, 92, 246, 0.15) !important;
   transform: translateY(-2px);
 }
 
-/* ─── Responsive ─── */
+/* ═══════════════════════════════════════════
+   End section (scrollable)
+═══════════════════════════════════════════ */
+
+.end-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.06) transparent;
+}
+
+.end-scroll::-webkit-scrollbar { width: 4px; }
+.end-scroll::-webkit-scrollbar-track { background: transparent; }
+.end-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 2px; }
+
+/* ═══════════════════════════════════════════
+   Responsive
+═══════════════════════════════════════════ */
+
 @media (max-width: 768px) {
-  .iphone {
-    width: 220px;
-    height: 450px;
-    border-radius: 38px;
-    padding: 8px;
-  }
+  .iphone { width: 220px; height: 450px; border-radius: 40px; padding: 8px; }
+  .iphone-screen { border-radius: 34px; }
+  .iphone-notch { width: 76px; height: 21px; top: 7px; }
+  .iphone-home { width: 82px; }
 
-  .iphone-screen {
-    border-radius: 32px;
-  }
+  .iphone-sm { width: 170px; height: 347px; border-radius: 32px; padding: 7px; }
+  .iphone-sm .iphone-screen { border-radius: 27px; }
+  .iphone-sm .iphone-notch { width: 60px; height: 17px; }
+  .iphone-sm .iphone-home { width: 68px; }
 
-  .iphone-notch {
-    width: 72px;
-    height: 20px;
-    top: 6px;
-  }
-
-  .iphone-home {
-    width: 80px;
-    bottom: 4px;
-  }
-
-  .iphone-sm {
-    width: 180px;
-    height: 368px;
-    border-radius: 32px;
-    padding: 7px;
-  }
-
-  .iphone-sm .iphone-screen {
-    border-radius: 27px;
-  }
-
-  .iphone-sm .iphone-notch {
-    width: 60px;
-    height: 17px;
-  }
+  .skip-btn { bottom: 20px; right: 20px; }
+  .ch-label { top: 20px; left: 20px; }
 }
