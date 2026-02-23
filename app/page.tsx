@@ -20,10 +20,10 @@ interface Chapter {
 const CHAPTERS: Chapter[] = [
   { type: "title", autoAdvanceMs: 3800 },
   { type: "single", label: "01", title: "It starts with a tap.", description: "A real-time mentorship platform that connects students with expert mentors — through chat, audio, and video.", menteeRange: [0, 1.5], playbackRate: 1 },
-  { type: "single", label: "02", title: "Load your wallet.", description: "Top up in seconds. No subscriptions — pay per minute of mentorship you actually use.", menteeRange: [2, 51], playbackRate: 2 },
+  { type: "single", label: "02", title: "Load your wallet.", description: "Top up in seconds. No subscriptions — pay per minute of mentorship you actually use.", menteeRange: [2, 51], playbackRate: 4 },
   { type: "single", label: "03", title: "Find the right mentor.", description: "Browse verified mentors. See ratings, experience, per-minute rates. Connect instantly.", menteeRange: [52, 58], playbackRate: 1 },
   { type: "text", title: "Two sides. One session.", description: "Same conversation. Perfectly synchronized." },
-  { type: "dual", label: "04", menteeRange: [59, 192], mentorRange: [0, 133], playbackRate: 1.5 },
+  { type: "dual", label: "04", menteeRange: [59, 192], mentorRange: [0, 133], playbackRate: 3 },
   { type: "end" },
 ];
 
@@ -77,21 +77,21 @@ function usePhoneScale() {
       /* ── Single phone ── */
       let ps: number;
       if (mobile) {
-        // Stacked: text (~110px) above phone, with gaps
-        const availH = vh - safeTop - safeBot - 130;
-        const availW = vw - 32;
+        // Stacked: text above phone — reserve generously for text + gaps + shadow
+        const availH = vh - safeTop - safeBot - 180;
+        const availW = vw - 48;
         ps = Math.min(availH / PH, availW / PW, 1);
       } else {
-        // Side by side: phone gets ~55% width, full safe height
-        const availH = vh - safeTop - safeBot - 40;
+        // Side by side: generous vertical margin
+        const availH = vh - safeTop - safeBot - 80;
         const availW = vw * 0.5 - 60;
         ps = Math.min(availH / PH, availW / PW, 1);
       }
 
       /* ── Dual phones ── */
-      const dualAvailH = vh - safeTop - safeBot - 70; // badge + labels
+      const dualAvailH = vh - safeTop - safeBot - 100; // badge + labels + shadow margin
       const dualGap = mobile ? 16 : 48;
-      const dualAvailW = vw - 40;
+      const dualAvailW = vw - 56;
       const dsH = dualAvailH / DH;
       const dsW = dualAvailW / (DW * 2 + dualGap);
       const ds = Math.min(dsH, dsW, 1);
@@ -170,6 +170,10 @@ export default function Home() {
     if (current >= CHAPTERS.length - 1) return;
     cleanup(); setProgress(0); setCurrent((c) => c + 1);
   }, [current, cleanup]);
+
+  const restart = useCallback(() => {
+    cleanup(); setProgress(0); setCurrent(0);
+  }, [cleanup]);
 
   /* ─── Chapter playback ─── */
   useEffect(() => {
@@ -311,7 +315,7 @@ export default function Home() {
                 <h2 style={{ fontFamily: S, fontSize: "clamp(22px, 3.5vw, 46px)", fontWeight: 400, lineHeight: 1.1, letterSpacing: -0.5 }}>
                   {CHAPTERS[idx].title}
                 </h2>
-                <p style={{ color: sub, fontSize: "clamp(12px, 1.5vw, 15px)", lineHeight: 1.75, marginTop: 12, marginLeft: mobile ? "auto" : undefined, marginRight: mobile ? "auto" : undefined, maxWidth: mobile ? 360 : 340 }}>
+                <p style={{ color: sub, fontSize: "clamp(12px, 1.5vw, 15px)", lineHeight: 1.75, marginTop: 12, maxWidth: mobile ? 360 : 340, ...(mobile ? { margin: "12px auto 0" } : {}) }}>
                   {CHAPTERS[idx].description}
                 </p>
               </div>
@@ -319,7 +323,7 @@ export default function Home() {
           </div>
 
           {/* Phone sizer — exact scaled dimensions, phone centered inside */}
-          <div style={{ ...singleSizer, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ ...singleSizer, display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
             <div className="phone-glow iphone" style={{ transform: `scale(${ps})`, transformOrigin: "center center" }}>
               <div className="iphone-screen">
                 <div className="iphone-notch" />
@@ -388,7 +392,7 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "flex-start", gap: mobile ? 12 : 32 }}>
             {/* Mentee */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-              <div style={{ ...dualSizer, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ ...dualSizer, display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
                 <div className="phone-glow iphone iphone-sm" style={{ transform: `scale(${ds})`, transformOrigin: "center center" }}>
                   <div className="iphone-screen">
                     <div className="iphone-notch" /><div className="iphone-home" />
@@ -401,7 +405,7 @@ export default function Home() {
             </div>
             {/* Mentor */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-              <div style={{ ...dualSizer, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ ...dualSizer, display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
                 <div className="phone-glow iphone iphone-sm" style={{ transform: `scale(${ds})`, transformOrigin: "center center" }}>
                   <div className="iphone-screen">
                     <div className="iphone-notch" /><div className="iphone-home" />
@@ -472,7 +476,11 @@ export default function Home() {
                   ))}
                 </div>
 
-                <div style={{ borderTop: "1px solid #141419", padding: "clamp(16px, 3vh, 40px) 0 clamp(24px, 4vh, 60px)", textAlign: "center" }}>
+                <div style={{ borderTop: "1px solid #141419", padding: "clamp(16px, 3vh, 40px) 0 clamp(24px, 4vh, 60px)", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+                  <button className="continue-btn" onClick={restart} style={{ animation: "none" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    Watch again
+                  </button>
                   <p style={{ color: "rgba(255,255,255,0.18)", fontSize: 13 }}>Built with Flutter + AWS · 2 developers &amp; 1 designer</p>
                 </div>
               </>

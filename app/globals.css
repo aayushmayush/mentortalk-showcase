@@ -105,19 +105,19 @@
    Buttons
 ═══════════════════════════════════════════ */
 .skip-btn {
-  position: absolute; bottom: 28px; right: 28px;
+  position: absolute; top: 22px; right: 28px;
   display: flex; align-items: center; gap: 8px;
-  padding: 12px 24px;
+  padding: 8px 18px;
   background: rgba(139,92,246,0.12);
   border: 1px solid rgba(139,92,246,0.3);
-  border-radius: 12px;
+  border-radius: 10px;
   color: rgba(196,181,253,0.9);
-  font-size: 13px; font-weight: 600;
+  font-size: 12px; font-weight: 600;
   cursor: pointer; transition: all 0.25s;
   font-family: "DM Sans", sans-serif;
   z-index: 30;
   backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  min-height: 44px;
+  min-height: 32px;
 }
 .skip-btn:hover { background: rgba(139,92,246,0.22); color: #e0d4fc; border-color: rgba(139,92,246,0.5); transform: translateX(3px); box-shadow: 0 0 20px rgba(139,92,246,0.12); }
 .skip-btn:active { transform: scale(0.97); }
@@ -163,18 +163,17 @@
 .end-scroll::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.15); border-radius: 2px; }
 
 /* ═══════════════════════════════════════════
-   RESPONSIVE — Only for NON-phone things
-   Phone sizing is 100% handled by JS
+   RESPONSIVE
 ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .skip-btn { bottom: 12px; right: 12px; padding: 10px 18px; font-size: 12px; border-radius: 10px; min-height: 40px; }
+  .skip-btn { top: 7px; right: 12px; padding: 7px 14px; font-size: 11px; border-radius: 8px; }
   .continue-btn { padding: 12px 26px; font-size: 14px; min-height: 46px; }
   .ch-label { top: 12px; left: 12px; font-size: 9px; }
   .ch-dots { top: 12px; }
   .ch-dot { width: 18px; }
 }
 @media (max-width: 480px) {
-  .skip-btn { bottom: 8px; right: 8px; padding: 8px 14px; font-size: 11px; }
+  .skip-btn { top: 5px; right: 8px; padding: 6px 12px; font-size: 10px; }
   .continue-btn { padding: 10px 22px; font-size: 13px; min-height: 42px; }
 }
 
