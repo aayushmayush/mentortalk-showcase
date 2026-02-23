@@ -326,7 +326,6 @@ export default function Home() {
           <div style={{ ...singleSizer, display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
             <div className="phone-glow iphone" style={{ transform: `scale(${ps})`, transformOrigin: "center center" }}>
               <div className="iphone-screen">
-                <div className="iphone-notch" />
                 <div className="iphone-home" />
                 <video ref={menteeRef} src="/mentee.mp4" muted playsInline preload="auto"
                   style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
@@ -395,7 +394,6 @@ export default function Home() {
               <div style={{ ...dualSizer, display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
                 <div className="phone-glow iphone iphone-sm" style={{ transform: `scale(${ds})`, transformOrigin: "center center" }}>
                   <div className="iphone-screen">
-                    <div className="iphone-notch" /><div className="iphone-home" />
                     <video ref={menteeRef2} src="/mentee.mp4" muted playsInline preload="auto"
                       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
@@ -408,7 +406,6 @@ export default function Home() {
               <div style={{ ...dualSizer, display: "flex", alignItems: "center", justifyContent: "center", overflow: "visible" }}>
                 <div className="phone-glow iphone iphone-sm" style={{ transform: `scale(${ds})`, transformOrigin: "center center" }}>
                   <div className="iphone-screen">
-                    <div className="iphone-notch" /><div className="iphone-home" />
                     <video ref={mentorRef} src="/mentor.mp4" muted playsInline preload="auto"
                       style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
@@ -430,7 +427,16 @@ export default function Home() {
           <div style={{ maxWidth: 1000, margin: "0 auto" }}>
             {isEnd && (
               <>
-                <div className="anim-fiu d1" style={{ textAlign: "center", padding: "clamp(36px, 6vh, 80px) 0 clamp(20px, 3vh, 60px)" }}>
+                {/* Restart */}
+                <div className="anim-fiu d1" style={{ display: "flex", justifyContent: "center", paddingTop: "clamp(24px, 4vh, 48px)" }}>
+                  <button className="continue-btn" onClick={restart} style={{ animation: "none" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                    Watch again
+                  </button>
+                </div>
+
+                {/* Hero */}
+                <div className="anim-fiu d2" style={{ textAlign: "center", padding: "clamp(20px, 3vh, 48px) 0 clamp(20px, 3vh, 60px)" }}>
                   <h2 style={{ fontFamily: S, fontSize: "clamp(24px, 4vw, 52px)", fontWeight: 400, letterSpacing: -1 }}>That&apos;s MentorTalk.</h2>
                   <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "clamp(13px, 1.6vw, 17px)", marginTop: 14, maxWidth: 460, lineHeight: 1.7, margin: "14px auto 0" }}>
                     Two complete apps, a real-time backend, and a billing engine — designed and developed by a team of three.
@@ -476,11 +482,7 @@ export default function Home() {
                   ))}
                 </div>
 
-                <div style={{ borderTop: "1px solid #141419", padding: "clamp(16px, 3vh, 40px) 0 clamp(24px, 4vh, 60px)", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
-                  <button className="continue-btn" onClick={restart} style={{ animation: "none" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                    Watch again
-                  </button>
+                <div style={{ borderTop: "1px solid #141419", padding: "clamp(16px, 3vh, 40px) 0 clamp(24px, 4vh, 60px)", textAlign: "center" }}>
                   <p style={{ color: "rgba(255,255,255,0.18)", fontSize: 13 }}>Built with Flutter + AWS · 2 developers &amp; 1 designer</p>
                 </div>
               </>

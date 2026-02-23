@@ -42,13 +42,11 @@
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
 }
-.iphone-screen { width: 100%; height: 100%; background: #000; border-radius: 40px; overflow: hidden; position: relative; }
-.iphone-notch { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; background: #1a1a1e; border-radius: 14px; z-index: 10; }
+.iphone-screen { width: 100%; height: 100%; background: #000; border-radius: 36px; overflow: hidden; position: relative; }
 .iphone-home { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 100px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; z-index: 10; }
 
 .iphone-sm { width: 240px; height: 490px; border-radius: 44px; padding: 9px; }
-.iphone-sm .iphone-screen { border-radius: 37px; }
-.iphone-sm .iphone-notch { width: 82px; height: 23px; top: 7px; }
+.iphone-sm .iphone-screen { border-radius: 33px; }
 .iphone-sm .iphone-home { width: 90px; bottom: 5px; }
 
 .phone-glow { filter: drop-shadow(0 0 80px rgba(139,92,246,0.08)) drop-shadow(0 20px 40px rgba(0,0,0,0.5)); }
